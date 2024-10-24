@@ -68,9 +68,10 @@ export default function LoginPage() {
                   inputBorderFocus: 'hsl(var(--ring))',
                   inputBorderHover: 'hsl(var(--ring))',
                 },
-                borderRadii: {
-                  button: 'var(--radius)',
-                  input: 'var(--radius)',
+                radii: {
+                  borderRadiusButton: 'var(--radius)',
+                  buttonBorderRadius: 'var(--radius)',
+                  inputBorderRadius: 'var(--radius)',
                 },
               },
             },
