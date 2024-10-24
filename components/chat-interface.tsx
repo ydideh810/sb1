@@ -20,12 +20,12 @@ interface ChatInterfaceProps {
   onCreditUse?: () => void;
 }
 
-export function ChatInterface({ noAuth, credits: noAuthCredits, onCreditUse }: ChatInterfaceProps) {
+export function ChatInterface({ noAuth, credits: noAuthCredits = 0, onCreditUse }: ChatInterfaceProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
-  const { credits, deductCredits } = useCredits();
+  const { credits = 0, deductCredits } = useCredits();
 
   const availableCredits = noAuth ? noAuthCredits : credits;
 
