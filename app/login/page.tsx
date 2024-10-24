@@ -83,7 +83,7 @@ export default function LoginPage() {
             },
           }}
           providers={['github', 'google']}
-          redirectTo={`${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/callback`}
+          redirectTo={`${'https://www.edustral.site'}/api/auth/callback`}
           onlyThirdPartyProviders={true}
           view="sign_in"
         />
