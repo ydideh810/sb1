@@ -83,7 +83,7 @@ export default function LoginPage() {
             },
           }}
           providers={['github', 'google']}
-          redirectTo={`${'https://www.edustral.site'}/api/auth/callback`}
+          redirectTo={typeof window !== 'undefined' ? `${window.location.origin}/api/auth/callback` : undefined}
           onlyThirdPartyProviders={true}
           view="sign_in"
         />
