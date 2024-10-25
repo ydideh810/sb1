@@ -83,7 +83,7 @@ export default function LoginPage() {
             },
           }}
           providers={['github', 'google']}
-          redirectTo={typeof window !== 'undefined' ? `${window.location.origin}/api/auth/callback` : undefined}
+          redirectTo={new URL('/api/auth/callback', window.location.origin).href}
           onlyThirdPartyProviders={true}
           view="sign_in"
         />
