@@ -7,19 +7,14 @@ import { Card } from '@/components/ui/card';
 import { GraduationCap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useToast } from '@/components/ui/use-toast';
 
 export default function LoginPage() {
   const supabase = createClientComponentClient();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  const [redirectUrl, setRedirectUrl] = useState('');
   const { toast } = useToast();
-
-  useEffect(() => {
-    setRedirectUrl(`${window.location.origin}/api/auth/callback`);
-  }, []);
 
   const handleGuestLogin = async () => {
     try {
@@ -58,47 +53,62 @@ export default function LoginPage() {
           </p>
         </div>
         
-        {redirectUrl && (
-          <Auth
-            supabaseClient={supabase}
-            appearance={{
-              theme: ThemeSupa,
-              extend: true,
-              variables: {
-                default: {
-                  colors: {
-                    brand: 'hsl(var(--primary))',
-                    brandAccent: 'hsl(var(--primary))',
-                    inputBackground: 'transparent',
-                    inputText: 'inherit',
-                    inputBorder: 'hsl(var(--border))',
-                    inputBorderFocus: 'hsl(var(--ring))',
-                    inputBorderHover: 'hsl(var(--ring))',
-                  },
-                  radii: {
-                    borderRadiusButton: 'var(--radius)',
-                    buttonBorderRadius: 'var(--radius)',
-                    inputBorderRadius: 'var(--radius)',
-                  },
+        <Auth
+          supabaseClient={supabase}
+          appearance={{
+            theme: ThemeSupa,
+            extend: true,
+            variables: {
+              default: {
+                colors: {
+                  brand: 'hsl(var(--primary))',
+                  brandAccent: 'hsl(var(--primary))',
+                  inputBackground: 'hsl(var(--background))',
+                  inputText: 'hsl(var(--foreground))',
+                  inputPlaceholder: 'hsl(var(--muted-foreground))',
+                  inputBorder: 'hsl(var(--border))',
+                  inputBorderFocus: 'hsl(var(--ring))',
+                  inputBorderHover: 'hsl(var(--ring))',
+                  defaultButtonBackground: 'hsl(var(--primary))',
+                  defaultButtonBackgroundHover: 'hsl(var(--primary))',
+                  defaultButtonBorder: 'hsl(var(--primary))',
+                  defaultButtonText: 'hsl(var(--primary-foreground))',
+                  dividerBackground: 'hsl(var(--border))',
+                },
+                radii: {
+                  borderRadiusButton: 'var(--radius)',
+                  buttonBorderRadius: 'var(--radius)',
+                  inputBorderRadius: 'var(--radius)',
+                },
+                space: {
+                  inputPadding: '0.5rem 0.75rem',
+                  buttonPadding: '0.5rem 1rem',
+                },
+                fonts: {
+                  bodyFontFamily: 'inherit',
+                  buttonFontFamily: 'inherit',
+                  inputFontFamily: 'inherit',
+                  labelFontFamily: 'inherit',
                 },
               },
-              className: {
-                container: 'w-full',
-                button: 'w-full px-4 py-2 bg-primary text-primary-foreground hover:bg-primary/90',
-                input: 'flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
-                label: 'text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70',
-                anchor: 'text-primary hover:text-primary/80',
-                message: 'text-sm text-muted-foreground mt-2',
-                divider: 'my-4',
-              },
-            }}
-            providers={['github', 'google']}
-            redirectTo={redirectUrl}
-            view="magic_link"
-            showLinks={true}
-            magicLink={true}
-          />
-        )}
+            },
+            className: {
+              container: 'w-full',
+              button: 'w-full px-4 py-2 bg-primary text-primary-foreground hover:bg-primary/90',
+              input: 'flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
+              label: 'text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70',
+              loader: 'text-primary',
+              anchor: 'text-primary hover:text-primary/80',
+              divider: 'my-4 border-t border-border',
+              message: 'text-sm text-muted-foreground mt-2',
+            },
+          }}
+          providers={['github', 'google']}
+          redirectTo={`${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/callback`}
+          onlyThirdPartyProviders={false}
+          view="sign_in"
+          showLinks={true}
+        />
 
         <div className="relative my-8">
           <div className="absolute inset-0 flex items-center">
