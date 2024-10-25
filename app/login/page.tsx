@@ -7,14 +7,19 @@ import { Card } from '@/components/ui/card';
 import { GraduationCap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useToast } from '@/components/ui/use-toast';
 
 export default function LoginPage() {
   const supabase = createClientComponentClient();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const [redirectUrl, setRedirectUrl] = useState('');
   const { toast } = useToast();
+
+  useEffect(() => {
+    setRedirectUrl(`${window.location.origin}/api/auth/callback`);
+  }, []);
 
   const handleGuestLogin = async () => {
     try {
@@ -53,40 +58,42 @@ export default function LoginPage() {
           </p>
         </div>
         
-        <Auth
-          supabaseClient={supabase}
-          appearance={{
-            theme: ThemeSupa,
-            variables: {
-              default: {
-                colors: {
-                  brand: 'hsl(var(--primary))',
-                  brandAccent: 'hsl(var(--primary))',
-                  inputBackground: 'transparent',
-                  inputText: 'inherit',
-                  inputBorder: 'hsl(var(--border))',
-                  inputBorderFocus: 'hsl(var(--ring))',
-                  inputBorderHover: 'hsl(var(--ring))',
-                },
-                radii: {
-                  borderRadiusButton: 'var(--radius)',
-                  buttonBorderRadius: 'var(--radius)',
-                  inputBorderRadius: 'var(--radius)',
+        {redirectUrl && (
+          <Auth
+            supabaseClient={supabase}
+            appearance={{
+              theme: ThemeSupa,
+              variables: {
+                default: {
+                  colors: {
+                    brand: 'hsl(var(--primary))',
+                    brandAccent: 'hsl(var(--primary))',
+                    inputBackground: 'transparent',
+                    inputText: 'inherit',
+                    inputBorder: 'hsl(var(--border))',
+                    inputBorderFocus: 'hsl(var(--ring))',
+                    inputBorderHover: 'hsl(var(--ring))',
+                  },
+                  radii: {
+                    borderRadiusButton: 'var(--radius)',
+                    buttonBorderRadius: 'var(--radius)',
+                    inputBorderRadius: 'var(--radius)',
+                  },
                 },
               },
-            },
-            className: {
-              container: 'w-full',
-              button: 'w-full px-4 py-2 bg-primary text-primary-foreground hover:bg-primary/90',
-              input: 'flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
-              label: 'text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70',
-            },
-          }}
-          providers={['github', 'google']}
-          redirectTo={new URL('/api/auth/callback', window.location.origin).href}
-          onlyThirdPartyProviders={true}
-          view="sign_in"
-        />
+              className: {
+                container: 'w-full',
+                button: 'w-full px-4 py-2 bg-primary text-primary-foreground hover:bg-primary/90',
+                input: 'flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50',
+                label: 'text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70',
+              },
+            }}
+            providers={['github', 'google']}
+            redirectTo={redirectUrl}
+            onlyThirdPartyProviders={true}
+            view="sign_in"
+          />
+        )}
 
         <div className="relative my-8">
           <div className="absolute inset-0 flex items-center">
