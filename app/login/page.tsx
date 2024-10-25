@@ -63,6 +63,7 @@ export default function LoginPage() {
             supabaseClient={supabase}
             appearance={{
               theme: ThemeSupa,
+              extend: true,
               variables: {
                 default: {
                   colors: {
@@ -88,6 +89,7 @@ export default function LoginPage() {
                 label: 'text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70',
                 anchor: 'text-primary hover:text-primary/80',
                 message: 'text-sm text-muted-foreground mt-2',
+                divider: 'my-4',
               },
             }}
             providers={['github', 'google']}
@@ -95,13 +97,6 @@ export default function LoginPage() {
             view="magic_link"
             showLinks={true}
             magicLink={true}
-            appearance={{
-              extend: true,
-              className: {
-                divider: 'my-4',
-                container: 'w-full',
-              },
-            }}
           />
         )}
 
