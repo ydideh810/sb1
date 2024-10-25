@@ -12,20 +12,29 @@ export async function middleware(req: NextRequest) {
     data: { session },
   } = await supabase.auth.getSession();
 
-  // Allow access to auth callback and no-auth routes without authentication
-  if (req.nextUrl.pathname.startsWith('/api/auth/callback') || 
-      req.nextUrl.pathname.startsWith('/no-auth')) {
+  // Public routes that don't require authentication
+  const publicRoutes = [
+    '/login',
+    '/no-auth',
+    '/api/auth/callback'
+  ];
+
+  const isPublicRoute = publicRoutes.some(route => 
+    req.nextUrl.pathname.startsWith(route)
+  );
+
+  // Allow public routes without authentication
+  if (isPublicRoute) {
+    // If user is logged in and tries to access login page, redirect to dashboard
+    if (session && req.nextUrl.pathname === '/login') {
+      return NextResponse.redirect(new URL('/dashboard', req.url));
+    }
     return res;
   }
 
-  // Redirect to login if accessing authenticated routes without session
-  if (!session && !req.nextUrl.pathname.startsWith('/login')) {
+  // Redirect to login if accessing protected route without session
+  if (!session) {
     return NextResponse.redirect(new URL('/login', req.url));
-  }
-
-  // Redirect to dashboard if accessing login with active session
-  if (session && req.nextUrl.pathname === '/login') {
-    return NextResponse.redirect(new URL('/dashboard', req.url));
   }
 
   return res;
